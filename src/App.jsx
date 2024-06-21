@@ -1,5 +1,6 @@
 import React, { useReducer } from "react";
 
+
 const initialState = {
   red: 0,
   green: 0,
@@ -7,26 +8,26 @@ const initialState = {
 };
 
 const reducer = (state, action) => {
-  const newState = { red: state.red, green: state.green, blue: state.blue };
+  let newState = { red: state.red, green: state.green, blue: state.blue };
 
   switch (action.type) {
     case "INCREMENT_RED":
-      newState.red = Math.min(state.red + 10, 255);
+      newState.red = state.red + 10 > 255 ? 255 : state.red + 10;
       break;
     case "DECREMENT_RED":
-      newState.red = (state.red - 10 + 256) % 256;
+      newState.red = state.red - 10 < 0 ? 0 : state.red - 10;
       break;
     case "INCREMENT_GREEN":
-      newState.green = Math.min(state.green + 10, 255);
+      newState.green = state.green + 10 > 255 ? 255 : state.green + 10;
       break;
     case "DECREMENT_GREEN":
-      newState.green = (state.green - 10 + 256) % 256;
+      newState.green = state.green - 10 < 0 ? 0 : state.green - 10;
       break;
     case "INCREMENT_BLUE":
-      newState.blue = Math.min(state.blue + 10, 255);
+      newState.blue = state.blue + 10 > 255 ? 255 : state.blue + 10;
       break;
     case "DECREMENT_BLUE":
-      newState.blue = (state.blue - 10 + 256) % 256;
+      newState.blue = state.blue - 10 < 0 ? 0 : state.blue - 10;
       break;
     default:
       break;
@@ -38,12 +39,17 @@ const reducer = (state, action) => {
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  const getTextColor = () => {
+    return state.red + state.green + state.blue > 382 ? "black" : "white";
+  };
+
   return (
     <>
       <div
         className="container"
         style={{
           backgroundColor: `rgb(${state.red}, ${state.green}, ${state.blue})`,
+          color: getTextColor(),
         }}
       >
         <h1>RGB Color: {`rgb(${state.red}, ${state.green}, ${state.blue})`}</h1>
